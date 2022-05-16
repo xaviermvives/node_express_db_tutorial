@@ -9,6 +9,6 @@ module.exports = {
     connection: {
       filename: "./data/lessons.db3",
     },
+    useNullAsDefault: true,
   },
-  useNullAsDefault: true,
 };
