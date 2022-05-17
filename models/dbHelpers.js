@@ -9,6 +9,8 @@ module.exports = {
   findById,
   remove,
   update,
+  findMessageById,
+  addMessage,
 };
 
 //add, find, findById, remove, update
@@ -37,4 +39,15 @@ function update(id, changes) {
     .then(() => {
       return findById(id);
     });
+}
+
+function findMessageById(id) {
+  return db("messages").where({ id: id }).first();
+}
+
+async function addMessage(message, lesson_id) {
+  const [id] = await db("messages")
+    .where({ lesson_id: lesson_id })
+    .insert(message);
+  return findMessageById(id);
 }

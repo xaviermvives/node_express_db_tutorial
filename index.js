@@ -1,3 +1,4 @@
+const { MoodBadSharp } = require("@material-ui/icons");
 const express = require("express");
 const Lessons = require("./models/dbHelpers");
 
@@ -78,6 +79,41 @@ server.patch("/api/lessons/:id", (req, res) => {
     })
     .catch((err) => {
       res.status(500).json({ message: "Unable to perform operation" });
+    });
+});
+
+server.post("/api/lessons/:id/messages", (req, res) => {
+  const { id } = req.params; //ho extreu com a string
+  const msg = req.body; //js object
+
+  if (!msg.lesson_id) {
+    msg["lesson_id"] = parseInt(id, 10); //convert to integer
+  }
+
+  Lessons.findById(id)
+    .then((lesson) => {
+      if (!lesson) {
+        res.status(404).json({ message: "Invalid id" });
+      }
+      //Check for all required fields
+      if (!msg.sender || !msg.text) {
+        res
+          .status(400)
+          .json({ message: "Must provide both Sender and Text values" });
+      }
+
+      Lessons.addMessage(msg, id)
+        .then((message) => {
+          if (message) {
+            res.status(200).json(message);
+          }
+        })
+        .catch((error) => {
+          res.status(500).json({ message: "Failed to add message" });
+        });
+    })
+    .catch((error) => {
+      res.status(500).json({ message: "Error finding lesson" });
     });
 });
 
