@@ -8,6 +8,7 @@ module.exports = {
   find,
   findById,
   remove,
+  update,
 };
 
 //add, find, findById, remove, update
@@ -27,4 +28,13 @@ function findById(id) {
 
 function remove(id) {
   return db("lessons").where({ id: id }).del();
+}
+
+function update(id, changes) {
+  return db("lessons")
+    .where({ id: id })
+    .update(changes)
+    .then(() => {
+      return findById(id);
+    });
 }
