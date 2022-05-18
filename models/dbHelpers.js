@@ -12,6 +12,7 @@ module.exports = {
   findMessageById,
   addMessage,
   findLessonMessages,
+  removeMessage,
 };
 
 //add, find, findById, remove, update
@@ -64,4 +65,8 @@ function findLessonMessages(lesson_id) {
       "m.text"
     )
     .where({ lesson_id: lesson_id });
+}
+
+function removeMessage(id) {
+  return db("messages").where({ id: id }).del();
 }
